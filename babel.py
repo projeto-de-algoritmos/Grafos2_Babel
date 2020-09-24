@@ -10,10 +10,6 @@ def create_edge(graph, node1, node2, word):
     'word': word
   })
 
-
-
-
-
 def dijkstra(graph, start, target):
   distances = {}
   visited = {}
@@ -54,6 +50,22 @@ def dijkstra(graph, start, target):
 
         heapq.heappush(queue, (possibility, edge['language']))
 
+
+def create_path(start, goal, graph):
+  distances = dijkstra(graph, start, goal)
+  if not (distances):
+    return 'impossivel'
+  
+  node = distances[goal]['previous_node']
+  path = []
+  path.append(goal)
+
+  while node:
+    path.append(node)
+    node = distances[node]['previous_node']
+  
+  return path
+
 n = int(input())
 
 while n != 0:
@@ -69,6 +81,6 @@ while n != 0:
     create_edge(graph, node1, node2, word)
     create_edge(graph, node2, node1, word)
 
-  distances = dijkstra(graph, start, goal)
-  print(distances)
+  create_path(start, goal, graph)
+
 
