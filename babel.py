@@ -10,7 +10,7 @@ def create_edge(graph, node1, node2, word):
     'word': word
   })
 
-def dijkstra(graph, start, target):
+def dijkstra(graph, start, target, socketio):
   distances = {}
   visited = {}
 
@@ -51,36 +51,52 @@ def dijkstra(graph, start, target):
         heapq.heappush(queue, (possibility, edge['language']))
 
 
-def create_path(start, goal, graph):
-  distances = dijkstra(graph, start, goal)
+
+def create_path(start, goal, graph, socketio):
+  distances = dijkstra(graph, start, goal, socketio)
+
+  ids = []
+
+  for distance in distances:
+    if distances[distance]['word']:
+      id = distances[distance]['word']
+      ids.append(id)
+
+  print(ids)
+
+  socketio.emit('update', {'ids': ids})
+
+
+
   if not (distances):
     return 'impossivel'
   
   node = distances[goal]['previous_node']
   path = []
-  path.append(goal)
+  path.append(distances[goal])
 
   while node:
-    path.append(node)
+    path.append(distances[node])
     node = distances[node]['previous_node']
   
   return path
 
-n = int(input())
 
-while n != 0:
-  start, goal = map(str, input().split())
-
+def build_and_solve(graph_data, socketio):
   graph = {}
-  paths = []
-  lengths = []
+  start = graph_data['start']
+  goal = graph_data['goal']
 
+  for edge in graph_data['graph']:
+    node1 = edge['node1']
+    node2 = edge['node2']
+    word = edge['word']
 
-  for i in range(n):
-    node1, node2, word = map(str, input().split())
     create_edge(graph, node1, node2, word)
     create_edge(graph, node2, node1, word)
 
-  create_path(start, goal, graph)
+  create_path(start, goal, graph, socketio)
+
+
 
 

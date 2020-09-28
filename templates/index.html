@@ -14,10 +14,18 @@
 <body>
   <h2>Weighted DiGraph</h2>
   <div id="mynetwork"></div>
+  <button onclick="solve()">Resolver</button>
 
   <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
       integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
   
+  <script type="text/javascript" charset="utf-8">
+    let socket = io();
+    socket.on('update', function (data) {
+      updateGraph(data.ids);
+    });
+  </script>
+
   <script>
     var nodes = []
     var edges = []
@@ -43,30 +51,56 @@
         'word': 'date'
       }
     ]
+    var languages = [];
+    var network = {};
+    var vis_edges = {};
+    var vis_nodes = {};
+
+    function shuffle(array) {
+      let i = array.length;
+      let randomized = [];
+      let j = 0;
+
+      while (i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        randomized.push(array[j]);
+        array.splice(j,1);
+      }
+
+      return randomized;
+    }
     
+    function solve() {
+      socket.emit('solve', { graph: languages, start: 'portugues', goal: 'frances'});
+    }
+
     function createGraph(){
-      for(let j = 0; j < 4; j++){
-        let index = Math.floor(Math.random()*object.length);
-        if(nodes.filter(e => e.id === object[index].node1).length == 0){
-          nodes.push({id: object[index].node1, label: object[index].node1});
+      languages = shuffle([...object]);
+      console.log(languages);
+      for(let i = 0; i < 4; i++){
+        if(nodes.filter(e => e.id === languages[i].node1).length == 0){
+          nodes.push({id: languages[i].node1, label: languages[i].node1});
         }
-        if(nodes.filter(e => e.id === object[index].node2).length == 0){
-          nodes.push({id: object[index].node2, label: object[index].node2});
+        if(nodes.filter(e => e.id === languages[i].node2).length == 0){
+          nodes.push({id: languages[i].node2, label: languages[i].node2});
         }
 
         edges.push({
-          arrows: 'to;from', 
-          from: object[index].node1, 
-          to: object[index].node2,
-          length: object[index].word.length,
-          label: object[index].word,
-          color: 'green'
+          id: languages[i].word,
+          arrows: '', 
+          from: languages[i].node1, 
+          to: languages[i].node2,
+          length: languages[i].word.length,
+          label: languages[i].word,
+          color: {
+            color: 'red',
+          }
         });
 
         console.log('Edges ' + edges + 'Nodes ' + nodes);
         
-        var vis_nodes = new vis.DataSet(nodes);
-        var vis_edges = new vis.DataSet(edges);
+        vis_nodes = new vis.DataSet(nodes);
+        vis_edges = new vis.DataSet(edges);
 
         var container = document.getElementById('mynetwork');
         var data = {
@@ -75,7 +109,17 @@
         };
         console.log(data);
         var options = {};
-        var network = new vis.Network(container, data, options);
+        network = new vis.Network(container, data, options);
+        // console.log(network);
+      }
+    }
+
+    function updateGraph(distances) {
+      console.log(distances);
+      console.log(vis_edges);
+      for (let i = 0; i < distances.length; i++) {
+        console.log(distances[i]);
+        vis_edges.update({id: distances[i], color: {color: 'green'}});
       }
     }
 

@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
-
+from babel import build_and_solve
 # from babel import start
 
 socketio = SocketIO()
@@ -13,10 +13,10 @@ socketio = SocketIO(app)
 def index():
     return render_template('index.html')
 
-# @socketio.on('start')
-# def handle_start(message):
-#     print(message)
-    
+@socketio.on('solve')
+def handle_solve(graph_data):
+    build_and_solve(graph_data, socketio)
+
 
 if __name__ == '__main__':
     socketio.run(app)
