@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js" 
+    integrity="sha512-XHDcSyqhOoO2ocB7sKOCJEkUjw/pQCJViP1ynpy+EGh/LggzrP6U/V3a++LQTnZT7sCQKeHRyWHfhN2afjXjCg==" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css" integrity="sha512-NJXM8vzWgDcBy9SCUTJXYnNO43sZV3pfLWWZMFTuCtEUIOcznk+AMpH6N3XruxavYfMeMmjrzDMEQ6psRh/6Hw==" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" integrity="sha512-8OVtKyemDe8Koi/74dnSJughhkwnzqq217zUtUumyvx0Z0kF6H0YYFobH2kEYjKMNq2xNQyN64dnleqecTSL0A==" crossorigin="anonymous" />
+</head>
+
+<body>
+  <h2>Weighted DiGraph</h2>
+  <div id="mynetwork"></div>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
+      integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+  
+  <script>
+    var nodes = []
+    var edges = []
+    var object = [
+      {
+        'node1': 'portugues',
+        'node2': 'espanhol',
+        'word': 'amigo'
+      },
+      {
+        'node1': 'ingles',
+        'node2': 'espanhol',
+        'word': 'red'
+      },
+      {
+        'node1': 'ingles',
+        'node2': 'espanhol',
+        'word': 'actual'
+      },
+      {
+        'node1': 'ingles',
+        'node2': 'frances',
+        'word': 'date'
+      }
+    ]
+    
+    function createGraph(){
+      for(let j = 0; j < 4; j++){
+        let index = Math.floor(Math.random()*object.length);
+        if(nodes.filter(e => e.id === object[index].node1).length == 0){
+          nodes.push({id: object[index].node1, label: object[index].node1});
+        }
+        if(nodes.filter(e => e.id === object[index].node2).length == 0){
+          nodes.push({id: object[index].node2, label: object[index].node2});
+        }
+
+        edges.push({
+          arrows: 'to;from', 
+          from: object[index].node1, 
+          to: object[index].node2,
+          length: object[index].word.length,
+          label: object[index].word,
+          color: 'green'
+        });
+
+        console.log('Edges ' + edges + 'Nodes ' + nodes);
+        
+        var vis_nodes = new vis.DataSet(nodes);
+        var vis_edges = new vis.DataSet(edges);
+
+        var container = document.getElementById('mynetwork');
+        var data = {
+            nodes: vis_nodes,
+            edges: vis_edges
+        };
+        console.log(data);
+        var options = {};
+        var network = new vis.Network(container, data, options);
+      }
+    }
+
+    createGraph()
+  </script>
+    
+</body>
+
+</html>
+<style>
+</style>
