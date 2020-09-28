@@ -16,6 +16,9 @@
   <div id="mynetwork"></div>
   <button onclick="solve()">Resolver</button>
 
+  <input type="text" id="start" placeholder="start"/>
+  <input type="text" id="goal" placeholder="goal"/>
+
   <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
       integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
   
@@ -71,7 +74,9 @@
     }
     
     function solve() {
-      socket.emit('solve', { graph: languages, start: 'portugues', goal: 'frances'});
+      const start = document.getElementById('start').value;
+      const goal = document.getElementById('goal').value;
+      socket.emit('solve', { graph: languages, start: start, goal: goal});
     }
 
     function createGraph(){
