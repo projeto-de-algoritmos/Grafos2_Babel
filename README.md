@@ -7,7 +7,7 @@
 |Matrícula | Aluno |
 | -- | -- |
 | 16/0014433  |  Maria Luiza Ferreira |
-| xx/xxxxxx  |  xxxx xxxx xxxxx |
+| 15/0009313  |  Felipe de Oliveira Hargreaves |
 
 ## Sobre 
 Este trabalho foi a evolução do primeiro projeto de Grafos 1. Utilizando o algortimo de Dijkstra para obter o menor caminho entre dois idiomas, utilizando o tamanho das palavras como peso das arestas. 
