@@ -21,8 +21,12 @@ def dijkstra(graph, start, target, socketio):
       'word': None,
       'previous_node': None
     }
-
-  distances[start]['distance'] = 0
+  
+  try:
+    distances[start]['distance'] = 0
+  except KeyError:
+    socketio.emit('update', {'ids': []})
+    return []
 
   for node in graph:
     visited[node] = False
@@ -56,32 +60,19 @@ def dijkstra(graph, start, target, socketio):
             id = distances[distance]['word']
             ids.append(id)
 
-        print(ids)
-
         heapq.heappush(queue, (possibility, edge['language']))
-        socketio.emit('update', {'ids': ids})
-        time.sleep(1)
+        # socketio.emit('update', {'ids': ids})
+        # time.sleep(1)
 
 
 
 
 def create_path(start, goal, graph, socketio):
-  distances = dijkstra(graph, start, goal, socketio)
-
+  distances = dijkstra(graph, start, goal, socketio)  
   ids = []
 
-  for distance in distances:
-    if distances[distance]['word']:
-      id = distances[distance]['word']
-      ids.append(id)
-
-  print(ids)
-
-  socketio.emit('update', {'ids': ids})
-
-
-
   if not (distances):
+    socketio.emit('update', {'ids': []})
     return 'impossivel'
   
   node = distances[goal]['previous_node']
@@ -91,7 +82,13 @@ def create_path(start, goal, graph, socketio):
   while node:
     path.append(distances[node])
     node = distances[node]['previous_node']
+
+  for distance in path:
+    if distance['word']:
+      id = distance['word']
+      ids.append(id)
   
+  socketio.emit('update', {'ids': ids})
   return path
 
 

@@ -12,13 +12,16 @@
 </head>
 
 <body>
-  <h2>Weighted DiGraph</h2>
+  <h2>Dijkstra - Babel</h2>
+  <p>Este trabalho foi adaptado do exercício do <a href="https://www.urionlinejudge.com.br/judge/pt/problems/view/1085">URI</a>. O grafo foi construído com algumas palavras que são comuns a mais de um idioma, mesmo que não necessariamente tenham o mesmo significado.</p>
+  <p>Insira um idioma de origem e um de destino para que seja criado o menor caminho entre eles. O menor caminho é calculado utilizando o algoritmo de Dijkstra com o tamanho das palavras sendo o peso das arestas.</p>
+  <input type="text" id="start" placeholder="Origem"/>
+  <input type="text" id="goal" placeholder="Destino"/>
+  <button onclick="solve()">Buscar caminho</button>
+  <button onclick="createGraph()">Gerar novo Grafo</button>
+  <p id="msg"></p>
+
   <div id="mynetwork"></div>
-  <button onclick="solve()">Resolver</button>
-
-  <input type="text" id="start" placeholder="start"/>
-  <input type="text" id="goal" placeholder="goal"/>
-
   <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
       integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
   
@@ -52,12 +55,56 @@
         'node1': 'ingles',
         'node2': 'frances',
         'word': 'date'
+      },
+      {
+        'node1': 'ingles',
+        'node2': 'holandes',
+        'word': 'bad'
+      },
+      {
+        'node1': 'ingles',
+        'node2': 'alemao',
+        'word': 'gift'
+      },
+      {
+        'node1': 'espanhol',
+        'node2': 'italiano',
+        'word': 'burro'
+      },
+      {
+        'node1': 'ingles',
+        'node2': 'alemao',
+        'word': 'fast'
+      },
+      {
+        'node1': 'italiano',
+        'node2': 'espanhol',
+        'word': 'vela'
+      },
+      {
+        'node1': 'ingles',
+        'node2': 'espanhol',
+        'word': 'tuna'
+      },
+      {
+        'node1': 'italiano',
+        'node2': 'portugues',
+        'word': 'prego'
+      },
+      {
+        'node1': 'portugues',
+        'node2': 'espanhol',
+        'word': 'largo'
       }
     ]
     var languages = [];
     var network = {};
     var vis_edges = {};
     var vis_nodes = {};
+
+    window.onload=function(){
+       createGraph()
+    }
 
     function shuffle(array) {
       let i = array.length;
@@ -76,13 +123,21 @@
     function solve() {
       const start = document.getElementById('start').value;
       const goal = document.getElementById('goal').value;
-      socket.emit('solve', { graph: languages, start: start, goal: goal});
+      let graph = [];
+
+      for(let i = 0; i < edges.length; i++){
+        graph.push({'node1': edges[i].from, 'node2': edges[i].to, 'word': edges[i].id})
+      }
+
+      socket.emit('solve', { graph: graph, start: start, goal: goal});
     }
 
     function createGraph(){
       languages = shuffle([...object]);
-      console.log(languages);
-      for(let i = 0; i < 4; i++){
+      edges = [];
+      nodes = [];
+
+      for(let i = 0; i < 6; i++){
         if(nodes.filter(e => e.id === languages[i].node1).length == 0){
           nodes.push({id: languages[i].node1, label: languages[i].node1});
         }
@@ -102,8 +157,6 @@
             color: 'red',
           }
         });
-
-        console.log('Edges ' + edges + 'Nodes ' + nodes);
         
         vis_nodes = new vis.DataSet(nodes);
         vis_edges = new vis.DataSet(edges);
@@ -113,38 +166,59 @@
             nodes: vis_nodes,
             edges: vis_edges
         };
-        console.log(data);
+
         var options = {
           height: "600px",
           clickToUse: false,
+          interaction: {zoomView: false}
         };
         network = new vis.Network(container, data, options);
-        // console.log(network);
       }
     }
 
     function updateGraph(distances) {
-      console.log(vis_edges);
       let keys = Object.keys(vis_edges._data);
+      
+      if(distances.length == 0){
+        document.getElementById("msg").innerHTML = 'Não existe caminho entre esses idiomas';
+      }
 
       for (let i = 0; i < distances.length; i++) {
-        console.log(distances[i]);
         vis_edges.update({id: keys[i], color: {color: 'red'}});
       }
 
-
       for (let i = 0; i < distances.length; i++) {
-        console.log(distances[i]);
         vis_edges.update({id: distances[i], color: {color: 'green'}});
       }
 
     }
-
-    createGraph()
   </script>
     
 </body>
 
 </html>
 <style>
+#msg {
+    font-family: Sans-serif;
+    color: red;
+    margin-top: -6px;
+    font-size: 13px;
+}
+
+button {
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 38px;
+    color: white;
+    padding: 9px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+h2, p{
+   font-family: Sans-serif;
+}
+
 </style>
