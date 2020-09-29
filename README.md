@@ -1,33 +1,21 @@
-**!! Atenção: Renomeie o seu repositório para (Tema)_(NomeDoProjeto). !!** 
+ # Babel
 
-Temas:
- - Grafos1
- - Grafos2
- - PD
- - D&C
- - Greed
- - Final 
- 
- **!! *Não coloque os nomes dos alunos no título do repositório*. Exemplo de título correto: Grafos2_Labirinto-do-Minotauro !!**
- 
- (Apague essa seção)
-
-# NomedoProjeto
-
-**Número da Lista**: X<br>
-**Conteúdo da Disciplina**: XXXXXXXXXX<br>
+**Número da Lista**: 2<br>
+**Conteúdo da Disciplina**: Grafos 2<br>
 
 ## Alunos
 |Matrícula | Aluno |
 | -- | -- |
-| xx/xxxxxx  |  xxxx xxxx xxxxx |
+| 16/0014433  |  Maria Luiza Ferreira |
 | xx/xxxxxx  |  xxxx xxxx xxxxx |
 
 ## Sobre 
-Descreva os objetivos do seu projeto e como ele funciona. 
+Este trabalho foi a evolução do primeiro projeto de Grafos 1. Utilizando o algortimo de Dijkstra para obter o menor caminho entre dois idiomas, utilizando o tamanho das palavras como peso das arestas. 
+
+A ideia foi uma adaptação do exercício do URI (https://www.urionlinejudge.com.br/judge/pt/problems/view/1085). O grafo foi construído com algumas palavras que são comuns a mais de um idioma, mesmo que não necessariamente tenham o mesmo significado.
 
 ## Screenshots
-Adicione 3 ou mais screenshots do projeto em funcionamento.
+
 
 ## Instalação 
 **Linguagem**: xxxxxx<br>
