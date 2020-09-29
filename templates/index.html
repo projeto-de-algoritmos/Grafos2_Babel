@@ -95,8 +95,9 @@
           arrows: '', 
           from: languages[i].node1, 
           to: languages[i].node2,
-          length: languages[i].word.length,
+          length: 150,
           label: languages[i].word,
+          width: 5,
           color: {
             color: 'red',
           }
@@ -113,19 +114,30 @@
             edges: vis_edges
         };
         console.log(data);
-        var options = {};
+        var options = {
+          height: "600px",
+          clickToUse: false,
+        };
         network = new vis.Network(container, data, options);
         // console.log(network);
       }
     }
 
     function updateGraph(distances) {
-      console.log(distances);
       console.log(vis_edges);
+      let keys = Object.keys(vis_edges._data);
+
+      for (let i = 0; i < distances.length; i++) {
+        console.log(distances[i]);
+        vis_edges.update({id: keys[i], color: {color: 'red'}});
+      }
+
+
       for (let i = 0; i < distances.length; i++) {
         console.log(distances[i]);
         vis_edges.update({id: distances[i], color: {color: 'green'}});
       }
+
     }
 
     createGraph()

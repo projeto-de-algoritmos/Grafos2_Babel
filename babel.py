@@ -1,5 +1,6 @@
 import sys
 import heapq
+import time
 
 def create_edge(graph, node1, node2, word):
   if not graph.get(node1):
@@ -48,7 +49,19 @@ def dijkstra(graph, start, target, socketio):
         distances[edge['language']]['word'] = edge['word']
         distances[edge['language']]['previous_node'] = node
 
+        ids = []
+
+        for distance in distances:
+          if distances[distance]['word']:
+            id = distances[distance]['word']
+            ids.append(id)
+
+        print(ids)
+
         heapq.heappush(queue, (possibility, edge['language']))
+        socketio.emit('update', {'ids': ids})
+        time.sleep(1)
+
 
 
 
