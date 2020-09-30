@@ -12,16 +12,18 @@
 </head>
 
 <body>
-  <h2>Dijkstra - Babel</h2>
-  <p>Este trabalho foi adaptado do exercício do <a href="https://www.urionlinejudge.com.br/judge/pt/problems/view/1085">URI</a>. O grafo foi construído com algumas palavras que são comuns a mais de um idioma, mesmo que não necessariamente tenham o mesmo significado.</p>
-  <p>Insira um idioma de origem e um de destino para que seja criado o menor caminho entre eles. O menor caminho é calculado utilizando o algoritmo de Dijkstra com o tamanho das palavras sendo o peso das arestas.</p>
-  <input type="text" id="start" placeholder="Origem"/>
-  <input type="text" id="goal" placeholder="Destino"/>
-  <button onclick="solve()">Buscar caminho</button>
-  <button onclick="createGraph()">Gerar novo Grafo</button>
-  <p id="msg"></p>
-
-  <div id="mynetwork"></div>
+  <div class="content">
+    <h2>Dijkstra - Babel</h2>
+    <p>Este trabalho foi adaptado do exercício do <a href="https://www.urionlinejudge.com.br/judge/pt/problems/view/1085">URI</a>. O grafo foi construído com algumas palavras que são comuns a mais de um idioma, mesmo que não necessariamente tenham o mesmo significado.</p>
+    <p>Insira um idioma de origem e um de destino para que seja criado o menor caminho entre eles. O menor caminho é calculado utilizando o algoritmo de Dijkstra com o tamanho das palavras sendo o peso das arestas.</p>
+    <input type="text" id="start" placeholder="Origem"/>
+    <input type="text" id="goal" placeholder="Destino"/>
+    <button onclick="solve()">Buscar caminho</button>
+    <button onclick="createGraph()">Gerar novo Grafo</button>
+    <p id="msg"></p>
+  
+    <div id="mynetwork"></div>
+  </div>
   <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
       integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
   
@@ -139,7 +141,7 @@
 
       for(let i = 0; i < 6; i++){
         if(nodes.filter(e => e.id === languages[i].node1).length == 0){
-          nodes.push({id: languages[i].node1, label: languages[i].node1});
+          nodes.push({id: languages[i].node1, label: languages[i].node1, font: { size: 16}});
         }
         if(nodes.filter(e => e.id === languages[i].node2).length == 0){
           nodes.push({id: languages[i].node2, label: languages[i].node2});
@@ -155,6 +157,9 @@
           width: 5,
           color: {
             color: 'red',
+          },
+          font: {
+            size: 16
           }
         });
         
@@ -203,6 +208,11 @@
     color: red;
     margin-top: -6px;
     font-size: 13px;
+}
+
+.content {
+  width: 80%;
+  margin: auto;
 }
 
 button {
